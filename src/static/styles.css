@@ -57,12 +57,35 @@ section h3 {
   color: #1a237e;
 }
 
+/* Style for activity cards */
 .activity-card {
-  margin-bottom: 15px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
   background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for participants section */
+.participants-section {
+  margin-top: 12px;
+}
+
+.participants-section h5 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.participants-list {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.participants-list li {
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .activity-card h4 {

@@ -1,86 +1,47 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Example data structure for activities and participants
+const activities = [
+  {
+    id: 1,
+    name: "Basketball",
+    description: "Join the basketball team and improve your skills.",
+    participants: ["John Doe", "Jane Smith"],
+  },
+  {
+    id: 2,
+    name: "Drama Club",
+    description: "Explore your acting talents in the drama club.",
+    participants: ["Alice Johnson", "Bob Brown"],
+  },
+];
+
+// Function to render activities and their participants
+function renderActivities() {
   const activitiesList = document.getElementById("activities-list");
-  const activitySelect = document.getElementById("activity");
-  const signupForm = document.getElementById("signup-form");
-  const messageDiv = document.getElementById("message");
+  activitiesList.innerHTML = ""; // Clear existing content
 
-  // Function to fetch activities from API
-  async function fetchActivities() {
-    try {
-      const response = await fetch("/activities");
-      const activities = await response.json();
+  activities.forEach((activity) => {
+    // Create activity card
+    const activityCard = document.createElement("div");
+    activityCard.classList.add("activity-card");
 
-      // Clear loading message
-      activitiesList.innerHTML = "";
+    // Add activity name and description
+    activityCard.innerHTML = `
+      <h4>${activity.name}</h4>
+      <p>${activity.description}</p>
+      <div class="participants-section">
+        <h5>Participants:</h5>
+        <ul class="participants-list">
+          ${activity.participants
+            .map((participant) => `<li>${participant}</li>`)
+            .join("")}
+        </ul>
+      </div>
+    `;
 
-      // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
-
-        activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
-      });
-    } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
-      console.error("Error fetching activities:", error);
-    }
-  }
-
-  // Handle form submission
-  signupForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const activity = document.getElementById("activity").value;
-
-    try {
-      const response = await fetch(
-        `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
-        {
-          method: "POST",
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok) {
-        messageDiv.textContent = result.message;
-        messageDiv.className = "success";
-        signupForm.reset();
-      } else {
-        messageDiv.textContent = result.detail || "An error occurred";
-        messageDiv.className = "error";
-      }
-
-      messageDiv.classList.remove("hidden");
-
-      // Hide message after 5 seconds
-      setTimeout(() => {
-        messageDiv.classList.add("hidden");
-      }, 5000);
-    } catch (error) {
-      messageDiv.textContent = "Failed to sign up. Please try again.";
-      messageDiv.className = "error";
-      messageDiv.classList.remove("hidden");
-      console.error("Error signing up:", error);
-    }
+    // Append activity card to the list
+    activitiesList.appendChild(activityCard);
   });
+}
 
-  // Initialize app
-  fetchActivities();
-});
+// Call the function to render activities on page load
+document.addEventListener("DOMContentLoaded", renderActivities);
